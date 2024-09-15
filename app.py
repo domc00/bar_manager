@@ -232,7 +232,8 @@ def get_chart_data():
     elif chart_type == 'overall_profit':
         products = select(p for p in Product)
         for product in products:
-            total_profit = sum(-log.quantity_change*(log.product.selling_price-log.product.cost_price) for log in logs if log.product == product and log.quantity_change < 0)
+            gain = sum(log.net_gain for log in logs if log.product == product)
+            total_profit = gain if gain > 0 else 0
             labels.append(product.name)
             data.append(float(total_profit))
 
