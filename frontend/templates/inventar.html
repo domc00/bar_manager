@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="text-center pb-2" style="border-bottom: 1px solid #C3B091; border-top: 1px solid #C3B091"> {% block title %} Inventar {% endblock %} proizvoda</h1>
+<div class="row my-3">
+    <div class="col-3"></div>
+    <div class="col-6 text-center">Klikni na proizvod za ažuriranje:</div>
+    <div class="d-flex justify-content-end mb-3 col-3">
+        <select class="form-select focus-ring" id="inventorySortDropdown" style="max-width: 240px;">
+            <option value="alphabetical-asc">Alfabetski (A-Z)</option>
+            <option value="alphabetical-desc">Alfabetski (Z-A)</option>
+            <option value="quantity-asc">Količina (Uzlazno)</option>
+            <option value="quantity-desc">Količina (Silazno)</option>
+        </select>
+    </div>
+</div>
+
+
+
+
+
+
+<!-- Učitaj proizvode u inventar -->
+<div class="row" id="inventoryGrid">
+    {% for product in products %}
+    <div class="product-item clickable-product" data-product-id="{{ product.id }}">
+        <img src="{{ product.image_url or 'https://via.placeholder.com/200x200' }}" alt="{{ product.name }}" class="product-thumbnail" width="180" height="320">
+        <div class="product-name">{{ product.name }}</div>
+        <div class="product-quantity">Na stanju: {{ product.quantity }}</div>
+    </div>
+    {% else %}
+        <p>No products available.</p> <!-- Ako ne postoji niti jedan proizvod -->
+    {% endfor %}
+</div>
+{% endblock %}
+
+{% block modal %}
+    <!-- Modal prozor za inventar stranicu -->
+<div class="modal fade" id="inventoryModal" tabindex="-1" aria-labelledby="inventoryModalTitle" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="inventoryModalTitle">Edit Inventory</h5>
+        <button type="button" class="btn-close focus-ring" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <div class="text-center m-auto" id="product-image">
+          <img src="https://via.placeholder.com/200x200" alt="Product Image" class="img-fluid w-100 h-100">
+        </div>
+
+          <!-- Quantity input -->
+        <div class="input-group my-3" style="text-center">
+            <div class="input-group-prepend">
+                <button class="btn btn-danger" style="width: 36px;" type="button" id="decrementBtn">-</button>
+            </div>
+            <input type="number" class="form-control text-center focus-ring" id="drinkQuantity" value="0" min="0">
+            <div class="input-group-append">
+                <button class="btn btn-success" style="width: 36px;" type="button" id="incrementBtn">+</button>
+            </div>
+        </div>
+
+      </div>
+      <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-secondary focus-ring" data-bs-dismiss="modal">Odustani</button>
+        <button type="button" class="btn btn-primary focus-ring" id="saveChangesButton">Spremi promjene</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="../static/js/inventoryEdit.js"></script>
+{% endblock %}

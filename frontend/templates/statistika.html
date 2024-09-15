@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="text-center pb-2" style="border-bottom: 1px solid #C3B091; border-top: 1px solid #C3B091"> {% block title %} Statistika {% endblock %}</h1>
+
+<!-- Dropdown opcije za grafikon -->
+    <!-- Statistika -->
+    <div class="row mb-3">
+        <div class="form-group col-3">
+            <label for="chart-type" class="mb-1">Odaberi statistiku</label>
+            <select id="chart-type" class="form-control focus-ring">
+                <option value="profit_per_unit">Profit po jedinici proizvoda</option>
+                <option value="overall_profit">Sveukupni profit</option>
+                <option value="quantity_sold">Količina prodana</option>
+            </select>
+        </div>
+
+    <!-- Vremenski raspon -->
+        <div class="form-group col-3">
+            <label for="time-range" class="mb-1">Vremenski raspon</label>
+            <select id="time-range" class="form-control focus-ring">
+                <option value="all_time">Svo vrijeme</option>
+                <option value="30_days">Zadnjih 30 dana</option>
+                <option value="7_days">Zadnjih 7 dana</option>
+                <option value="1_day">Zadnji dan</option>
+                <option value="1_hour">Zadnjih sat vremena</option>
+            </select>
+        </div>
+
+    <!-- Stil/tip grafikona -->
+        <div class="form-group col-3">
+            <label for="chart-style" class="mb-1">Tip grafikona</label>
+            <select id="chart-style" class="form-control focus-ring">
+                <option value="bar">Bar</option>
+                <option value="bar">Horizontal bar</option>
+                <option value="line">Line</option>
+                <option value="pie">Pie</option>
+                <option value="doughnut">Doughnut</option>
+            </select>
+        </div>
+
+    <!-- Sortiraj podatke -->
+        <div class="form-group col-3">
+            <label for="sort-order" class="mb-1">Sortiranje podataka</label>
+            <select id="sort-order" class="form-control focus-ring">
+                <option value="high_to_low">Silazno</option>
+                <option value="low_to_high">Uzlazno</option>
+            </select>
+        </div>
+    </div>
+
+    <canvas id="statistics-chart" style="width: 100%; max-height: 400px;"></canvas>
+{% endblock %}
+
+{% block scripts %}
+    <script src="../static/js/stats.js"></script>
+{% endblock %}

@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="text-center pb-2" style="border-bottom: 1px solid #C3B091; border-top: 1px solid #C3B091"> {% block title %} Proizvodi {% endblock %}</h1>
+
+<div class="row my-3">
+    <div class="col-3">
+        <button type="button" class="btn btn-primary focus-ring" id="addNewProductButton">
+          Novi proizvod
+        </button>
+    </div>
+    <div class="col-6 text-center">
+        <div>Klikni na proizvod za ažuriranje:</div>
+    </div>
+    <div class="col-3">
+        <div class="d-flex justify-content-end align-content-bottom">
+            <select class="form-select focus-ring" id="productsSortDropdown" style="max-width: 240px;">
+                <option value="alphabetical-asc">Alfabetski (A-Z)</option>
+                <option value="alphabetical-desc">Alfabetski (Z-A)</option>
+                <option value="cost-asc">Nabavna cijena (Uzlazno)</option>
+                <option value="cost-desc">Nabavna cijena (Silazno)</option>
+                <option value="sell-asc">Prodajna cijena (Uzlazno)</option>
+                <option value="sell-desc">Prodajna cijena (Silazno)</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<!-- Učitaj proizvode -->
+<div class="row" id="productsGrid">
+    {% for product in products %}
+    <div class="product-item clickable-product" data-product-id="{{ product.id }}">
+        <img src="{{ product.image_url }}" alt="{{ product.name }}" class="product-thumbnail">
+        <div class="product-name">{{ product.name }}</div>
+        <div class="product-cost">Nabavna cijena: €{{ product.cost_price }}</div>
+        <div class="product-sell">Prodajna cijena: €{{ product.selling_price }}</div>
+    </div>
+    {% else %}
+        <p>No products available.</p> <!-- Ako nema niti jednog proizvoda -->
+    {% endfor %}
+</div>
+{% endblock %}
+
+{% block modal %}
+    <!-- Dodaj/Uredi proizvod -->
+<div class="modal fade" id="addEditProductModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title" id="productModalTitle">Ažuriraj proizvod:</h5>
+        <button type="button" class="btn-close focus-ring" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-5 align-self-center">
+            <div id="productImagePlaceholder" class="m-auto" style="width: 200px; height: 200px; background-color: #f5f5dc;">
+              <img id="productImage" src="https://via.placeholder.com/200x200" alt="Mjesto za sliku proizvoda" style="width: 100%; height: 100%;">
+            </div>
+          </div>
+
+          <div class="col-md-7">
+            <form id="productForm">
+              <div class="mb-3">
+                <label for="productName" class="form-label">Naziv proizvoda</label>
+                <input type="text" class="form-control focus-ring" id="productName" name="name" placeholder="Dodaj novi proizvod">
+              </div>
+
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label for="costPrice" class="form-label">Nabavna cijena (€)</label>
+                  <div class="input-group">
+                    <span class="input-group-text">€</span>
+                    <input type="number" name="cost_price" class="form-control focus-ring" id="costPrice" placeholder="0.00" min="0">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <label for="sellingPrice" class="form-label">Prodajna cijena (€)</label>
+                  <div class="input-group">
+                    <span class="input-group-text">€</span>
+                    <input type="number" name="selling_price" class="form-control focus-ring" id="sellingPrice" placeholder="0.00" min="0">
+                  </div>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="productImageURL" class="form-label">URL slike proizvoda</label>
+                <input type="url" name="productImageURL" class="form-control focus-ring" id="productImageURL" placeholder="Unesi URL slike">
+                <p class="text-center my-2">ili učitaj datoteku</p>
+                <input type="file" name="uploadProductImage" class="form-control focus-ring" id="uploadProductImage">
+              </div>
+            </form>
+          </div>
+        </div>
+
+              <!-- Prozor za potvrdu brisanja proizvoda -->
+        <div id="deleteConfirmationBox" class="alert alert-danger row align-items-center fade fade-in d-none" role="alert">
+            <div class="col-9">
+                <strong>Da li sigurno želite izbrisati proizvod <span id="deleteProductName"></span>?</strong>
+            </div>
+            <div class="col-3 text-end">
+                <button type="button" class="btn btn-secondary" id="cancelDelete">Odustani</button>
+                <button type="button" class="btn btn-danger" id="confirmDelete">Izbriši</button>
+            </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+          <div class="row w-100 justify-content-between">
+              <div class="col-6">
+                  <button type="button" class="btn btn-secondary focus-ring" data-bs-dismiss="modal">Zatvori</button>
+              </div>
+              <div class="col-6 text-end">
+                  <button type="button" class="btn btn-primary focus-ring d-none" id="addProductButton">Dodaj proizvod</button>
+                  <button type="button" class="btn btn-primary focus-ring d-none" id="saveProductButton">Spremi promjene</button>
+                  <button type="button" class="btn btn-danger focus-ring d-none" id="deleteProductButton" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">Izbriši prodizvod</button>
+              </div>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="../static/js/productEdit.js"></script>
+{% endblock %}

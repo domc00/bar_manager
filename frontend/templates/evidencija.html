@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="text-center pb-2" style="border-bottom: 1px solid #C3B091; border-top: 1px solid #C3B091"> {% block title %} Evidencija {% endblock %}</h1>
+
+<!-- Tablica izvještaja -->
+<table class="table text-center">
+    <thead style="position: sticky; top: 61.6px; background-color: beige;">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Proizvod</th>
+            <th scope="col">Promjena stanja</th>
+            <th scope="col">Zarada</th>
+            <th scope="col">Vrijeme</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for log in logs %}
+            {% if log.net_gain < 0 %}
+                {% set bg_color = '#ffefd1' %}
+                {% set purchase = '+' %}
+                {% set txt_color = '#852300' %}
+            {% else %}
+                {% set bg_color = '#f7ffd1' %}
+                {% set profit = '+' %}
+                {% set txt_color = '#748500' %}
+            {% endif %}
+            <tr style="background-color: {{ bg_color }} !important;">
+                <th scope="row">{{ log.id }}</th>
+                <td>{{ log.product.name }}</td>
+                <td>{{ purchase }}{{ log.quantity_change }}</td>
+                <td style="color: {{ txt_color }}">{{ profit }}{{ log.net_gain }} EUR</td>
+                <td>{{ log.timestamp }}</td>
+            </tr>
+        {% else %}
+            <p>No logs available.</p> <!-- Ako ne postoji niti jedan izvještaj -->
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
